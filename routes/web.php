@@ -29,9 +29,17 @@ Route::group(['prefix'=>'admin', 'middleware'=>[ 'isAdmin','auth', 'PreventBackH
     Route::get('dashboard', [AdminController::class,'index'])->name('admin.dashboard');
     Route::get('profile',[AdminController::class, 'profile'])->name('admin.profile');
     Route::get('settings',[AdminController::class, 'settings'])->name('admin.settings');
+   
+    Route::get('role-edit/{id}',[AdminController::class, 'edit'])->name('admin.edit');
+    Route::put('role-update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    //view
+    Route::get('importView',[AdminController::class,'importView' ])->name('admin.import');
+    Route::post('importFunction', [AdminController::class, 'importFunction'])->name('admin.importFunc');
+    //store view
 
 
 });
+
 Route::group(['prefix'=>'user', 'middleware'=>['isUser','auth', 'PreventBackHistory']], function(){
      Route::get('dashboard', [UserController::class,'index' ])->name('user.dashboard');
      Route::get('profile',[UserController::class, 'profile'])->name('user.profile');

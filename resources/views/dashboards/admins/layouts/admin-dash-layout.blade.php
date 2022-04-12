@@ -18,6 +18,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini">
@@ -60,9 +64,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="user-panel mt-3 pb-5 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ Auth::user()->picture }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -78,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ (request()->is('admin/dashboard'))? 'active':'' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
                             Dashboard
@@ -88,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                                        
                     <li class="nav-item">
-                        <a href="{{ route('admin.profile') }}"  class="nav-link">
+                        <a href="{{ route('admin.profile') }}"  class="nav-link {{ (request()->is('admin/profile'))? 'active':'' }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile                          
@@ -96,13 +100,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.settings') }}" class="nav-link">
+                        <a href="{{ route('admin.settings') }}" class="nav-link {{ (request()->is('admin/settings'))? 'active':'' }}">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Settings                        
                        </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                      <a href="{{ route('admin.import') }}" class="nav-link {{ (request()->is('admin/settings'))? 'active':'' }}">
+                      <i class="nav-icon fas fa-cog"></i>
+                      <p>
+                          Upload result                       
+                     </p>
+                      </a>
+                  </li>
         </ul>
       </nav>
 

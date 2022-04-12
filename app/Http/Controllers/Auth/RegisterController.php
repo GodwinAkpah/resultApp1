@@ -91,7 +91,7 @@ class RegisterController extends Controller
         $user= new User();
         $user->name= $request->name;
         $user->email= $request->email;
-        $user->role=2;
+        $user->role=$request->user;
         $user->profileColor= $request->profileColor;
         $user->phone= $request->phone;
         $user->password=\Hash::make($request->password);

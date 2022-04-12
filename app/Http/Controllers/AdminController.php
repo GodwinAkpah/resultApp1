@@ -1,20 +1,53 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
+
+
+
+ use App\Imports\resultImport;
+
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
     //
-    function index(){
+    public function index(){
         return view('dashboards.admins.index');
     }
-    function profile(){
+  public  function profile(){
         return view('dashboards.admins.profile');
 
     }
-    function settings(){
-        return view('dashboards.admins.settings');
+  public  function settings(){
+        $users =User::all();
+
+        return view('dashboards.admins.settings')->with('users',$users);
     }
+   public function edit(Request $request, $id){
+       $users= User::findOrFail($id);
+       return view('dashboards.admins.edit')->with('users',$users);
+
+    }
+    public function update(Request $request, $id){
+
+        $users = User::find($id);
+        $users->name = $request->input('username');
+        $users->role= $request->input('usertype');
+        $users->update();
+        return 'success';
+        //  return redirect("{{ route('admin.settings')}}")->with("status", "your data is updated");
+    }
+    public function importView(){
+        return view('dashboards.admins.upload');
+    }
+    public function importFunction(Request $request){
+        Excel::import(new resultImport(), $request->file(key:'import_file'));
+        return 'success';
+
+    }
+    
+
 }
