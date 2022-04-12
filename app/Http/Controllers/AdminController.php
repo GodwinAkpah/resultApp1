@@ -44,8 +44,26 @@ class AdminController extends Controller
         return view('dashboards.admins.upload');
     }
     public function importFunction(Request $request){
-        Excel::import(new resultImport(), $request->file(key:'import_file'));
-        return 'success';
+        try {
+            Excel::import(new resultImport(), $request->file(key:'import_file'));
+            // dd('j');
+         }
+         catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+           
+            // foreach($failures as $failure){
+
+
+            //     $failure->row();
+            //     $failure->attributes();
+            //     $failure->errors();
+            //     $failure->values();
+
+            // }
+
+          return back()->with('errors', $failures);
+            // return view('welcome', compact('failures'));
+         }
 
     }
     

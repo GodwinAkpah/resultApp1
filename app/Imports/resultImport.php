@@ -1,13 +1,23 @@
 <?php
 
 namespace App\Imports;
-
+use App\Models\User;
 use App\Models\result;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Validation\ValidationException;
 
-class resultImport implements ToModel,WithHeadingRow
+class resultImport implements ToModel, WithValidation,WithHeadingRow,SkipsOnError
 {
+    use SkipsErrors;
+    private $users;
+  public function __construct(){
+      $this->users = User::select('id','name','email')->get();
+  } 
+   
     /**
     * @param array $row
     *
@@ -15,11 +25,30 @@ class resultImport implements ToModel,WithHeadingRow
     */
     public function model(array $row)
     {
+        
+
+        $user= User::where('name',$row['name'])->where('email',$row['email'])->first();
         return new result([
-            'user_id'=> $row['user_id'],
+            // 'user_id'=> $row['user_id'],
+            'user_id'=> $user->id,
+
             'course'=>$row['course'],
             'grade'=> $row['grade']                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
             
         ]);
+
+    }
+    public function onFailure(Failure... $failures)
+   {
+    $exception = ValidationException::withMessages(collect($failures)->map->toArray()->all());
+
+    throw $exception;
+    }
+
+    public function  rules(): array {
+        return [
+            '*.name' => 'exists:users,name',
+            '*.email' => 'exists:users,email',
+        ];
     }
 }
